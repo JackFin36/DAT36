@@ -1,16 +1,14 @@
-import sys
-from PyQt6 import QtWidgets, uic
+from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QFileDialog
 import pandas as pd
-sys.path.append(r'C:\Users\duong\Desktop\DATool\CODE\src\classes')
-from ImportManager import ImportManager
+from CODE.src.classes.DataManager import DataManager
 
 class ImportDataButton(QtWidgets.QPushButton):
     def __init__(self, main_window):
         super().__init__()
         self.clicked.connect(self.import_data)  # Connect the button click to the import_data method
         self.main_window = main_window  # Reference to the main window
-        self.IM = ImportManager
+        self.IM = DataManager
 
     def import_data(self):
         # Open a file dialog to select a data file
