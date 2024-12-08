@@ -38,6 +38,23 @@ class DataManager():
         else:
             print(f"File not found: {file_path}")
 
+    def process_file(self, file_path):
+            """Process the imported data file."""
+            try:
+                if file_path.endswith('.csv'):
+                    self.DM.import_csv(file_path)
+                    print("CSV Data Imported")
+                elif file_path.endswith('.json'):
+                    self.DM.import_json(file_path)
+                    print("JSON Data Imported")
+                elif file_path.endswith('.txt'):
+                    self.DM.import_txt(file_path)
+                    print("TXT Data Imported")
+                else:
+                    print("Unsupported file type.")
+            except Exception as e:
+                print(f"Error importing file: {e}")
+
     def get_data(self, file_path):
         """Retrieve the NumPy array for the given file path."""
         return self.datasets.get(file_path, None)

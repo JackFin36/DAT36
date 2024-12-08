@@ -20,21 +20,4 @@ class ImportDataButton(QtWidgets.QPushButton):
                                                      options=options)
         if file_path:
             # Process the selected file
-            self.process_file(file_path)
-
-    def process_file(self, file_path):
-        """Process the imported data file."""
-        try:
-            if file_path.endswith('.csv'):
-                self.DM.import_csv(self, file_path)
-                print("CSV Data Imported")
-            elif file_path.endswith('.json'):
-                self.DM.import_json(self, file_path)
-                print("JSON Data Imported")
-            elif file_path.endswith('.txt'):
-                self.DM.import_txt(self, file_path)
-                print("TXT Data Imported")
-            else:
-                print("Unsupported file type.")
-        except Exception as e:
-            print(f"Error importing file: {e}")
+            self.DM.process_file(file_path)
