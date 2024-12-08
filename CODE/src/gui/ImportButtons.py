@@ -1,18 +1,20 @@
+import sys
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QFileDialog
 import pandas as pd
-from CODE.src.classes.DataManager import DataManager
+sys.path.append(r'CODE\src\classes')
+from DataManager import DataManager
 
 class ImportDataButton(QtWidgets.QPushButton):
     def __init__(self, main_window):
         super().__init__()
         self.clicked.connect(self.import_data)  # Connect the button click to the import_data method
         self.main_window = main_window  # Reference to the main window
-        self.IM = DataManager
+        self.DM = DataManager
 
     def import_data(self):
         # Open a file dialog to select a data file
-        options = QFileDialog.Options()
+        options = QFileDialog.Option(0)
         file_path, _ = QFileDialog.getOpenFileName(self, "Select Data File", "", 
                                                      "CSV Files (*.csv);;JSON Files (*.json);;Text Files (*.txt);;All Files (*)", 
                                                      options=options)
@@ -24,13 +26,13 @@ class ImportDataButton(QtWidgets.QPushButton):
         """Process the imported data file."""
         try:
             if file_path.endswith('.csv'):
-                self.IM.import_csv(self, file_path)
+                self.DM.import_csv(self, file_path)
                 print("CSV Data Imported")
             elif file_path.endswith('.json'):
-                self.IM.import_json(self, file_path)
+                self.DM.import_json(self, file_path)
                 print("JSON Data Imported")
             elif file_path.endswith('.txt'):
-                self.IM.import_txt(self, file_path)
+                self.DM.import_txt(self, file_path)
                 print("TXT Data Imported")
             else:
                 print("Unsupported file type.")
