@@ -6,13 +6,19 @@ import os
 class DataManager():
     def __init__(self):
         self.datasets = {}  # Dictionary to store datasets with filenames as keys
+        self.headers = {}   #dictonary to store headers of the datasets with filenames as keys
 
     def import_csv(self, file_path):
-        """Import a CSV file and convert it to a NumPy array."""
+        """Import a CSV file and convert it to a NumPy array, also extracting headers."""
         if os.path.exists(file_path):
             df = pd.read_csv(file_path)
             self.datasets[file_path] = df.to_numpy()
-            print(f"Imported CSV: {file_path}")
+            
+            # Extract headers
+            headers = df.columns.tolist()
+            self.headers[file_path] = headers 
+            
+            print(f"Imported CSV: {file_path} with headers: {headers}")
         else:
             print(f"File not found: {file_path}")
 
@@ -22,9 +28,12 @@ class DataManager():
             with open(file_path, 'r') as f:
                 data = json.load(f)
             # Convert to DataFrame and then to NumPy array
-            df = pd.json_normalize(data)
+            df = pd.DataFrame(data)
             self.datasets[file_path] = df.to_numpy()
-            print(f"Imported JSON: {file_path}")
+            headers = df.columns.tolist()
+            self.headers[file_path] = headers  
+
+            print(f"Imported JSON: {file_path} with headers: {headers}")
         else:
             print(f"File not found: {file_path}")
 
@@ -42,13 +51,13 @@ class DataManager():
             """Process the imported data file."""
             try:
                 if file_path.endswith('.csv'):
-                    self.DM.import_csv(file_path)
+                    self.import_csv(file_path)
                     print("CSV Data Imported")
                 elif file_path.endswith('.json'):
-                    self.DM.import_json(file_path)
+                    self.import_json(file_path)
                     print("JSON Data Imported")
                 elif file_path.endswith('.txt'):
-                    self.DM.import_txt(file_path)
+                    self.import_txt(file_path)
                     print("TXT Data Imported")
                 else:
                     print("Unsupported file type.")
@@ -58,6 +67,10 @@ class DataManager():
     def get_data(self, file_path):
         """Retrieve the NumPy array for the given file path."""
         return self.datasets.get(file_path, None)
+    
+    def get_headers(self, file_path):
+        """Retrieve the headers from NumPy array for the given file path."""
+        return self.headers.get(file_path, None)
 
     def list_datasets(self):
         """List all imported datasets."""

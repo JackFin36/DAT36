@@ -1,7 +1,7 @@
 import sys
+import os
 from PyQt6 import QtWidgets, uic
 from DropArea import DropArea
-from ImportButtons import ImportDataButton
 sys.path.append(r'CODE\src\classes')
 from DataManager import DataManager
 
@@ -17,9 +17,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Assigning objects to important widgets
 
         self.import_button = self.findChild(QtWidgets.QPushButton, "importButton")  # Button for importing data
-
-        self.table_widget = self.findChild(QtWidgets.QTableWidget, "rawDataTabular")  # Table widget to display data
-
+        self.table_widget = self.findChild(QtWidgets.QTabWidget, "tabWidget")  # Table widget to display data
         self.drop_area = self.findChild(QtWidgets.QTextEdit, "DropArea")  # QTextEdit for drag-and-drop
         #self.DA = DropArea(self.drop_area)
 
@@ -30,21 +28,31 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
     def buttonImport(self):
-        ImportDataButton.import_data(self)
-        self.display_data_in_tabs(self, self.DM.datasets)
+        options = QtWidgets.QFileDialog.Option(0)
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "Select Data File", "", 
+                                                     "CSV Files (*.csv);;JSON Files (*.json);;Text Files (*.txt);;All Files (*)", 
+                                                     options=options)
+        if file_path:
+            # Process the selected file
+            self.DM.process_file(file_path)
+            self.filename = os.path.basename(file_path)
+        
+        self.display_data_in_tabs(self.DM.get_data(file_path), self.DM.get_headers(file_path), self.filename)
     
     
-    def display_data_in_tabs(self, dataframe):
-        for column in dataframe.columns:
-
-            self.table_widget.setRowCount(dataframe.shape[0])  # Anzahl der Zeilen
-            self.table_widget.setColumnCount(1)  # Eine Spalte
-            
-            # Setze den Header für die Tabellenspalte
-            self.table_widget.setHorizontalHeaderLabels([column])
-            
-            # Füge die Daten in die Tabelle ein
-            for row in range(dataframe.shape[0]):
-                item = QtWidgets.QTableWidgetItem(str(dataframe[column].iloc[row]))
-                self.table_widget.setItem(row, 0, item)
+    def display_data_in_tabs(self, data, headers,filename):
+        tab = QtWidgets.QWidget()
+        layout = QtWidgets.QVBoxLayout()
+        
+        
+        # Tabelle erstellen
+        table = QtWidgets.QTableWidget(data.shape[0], data.shape[1])
+        table.setHorizontalHeaderLabels(headers)
+        for i in range(data.shape[0]):
+            for j in range(data.shape[1]):
+                table.setItem(i, j, QtWidgets.QTableWidgetItem(str(data[i, j])))
+        
+        layout.addWidget(table)
+        tab.setLayout(layout)
+        self.table_widget.addTab(tab, filename)
             

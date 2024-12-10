@@ -17,6 +17,18 @@ df = pd.DataFrame(data)
 
 # Speichere als CSV-Datei
 CSV_TEST = df.to_csv('random_data.csv', index=False)
-
 print("CSV-Datei 'random_data.csv' wurde erstellt.")
-print(df)
+JSON_TEST = df.to_json('random_data.json', index=False)
+print("JSON-Datei 'random_data.json' wurde erstellt.")
+
+
+import sys 
+sys.path.append(r'CODE\src\classes')
+from DataManager import DataManager
+
+DM = DataManager()
+DM.process_file(r'random_data.csv')
+print(DM.get_data(r'random_data.csv'))
+
+DM.process_file(r'random_data.json')
+print(DM.get_data(r'random_data.json'))
