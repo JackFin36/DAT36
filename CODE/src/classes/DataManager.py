@@ -6,7 +6,8 @@ import os
 class DataManager():
     def __init__(self):
         self.datasets = {}  # Dictionary to store datasets with filenames as keys
-        self.headers = {}   #dictonary to store headers of the datasets with filenames as keys
+        self.headers = {}   # Dictionary to store headers of the datasets with filenames as keys
+        self.selected_file = None # Placeholder for later file selection
 
     def import_csv(self, file_path):
         """Import a CSV file and convert it to a NumPy array, also extracting headers."""
@@ -73,5 +74,12 @@ class DataManager():
         return self.headers.get(file_path, None)
 
     def list_datasets(self):
-        """List all imported datasets."""
+        """List all imported datasets (filenames)."""
         return list(self.datasets.keys())
+
+    def selectData(self, file_path, keys=[]):
+        """ Create a new dataset for further analysis with given keys"""
+        dataset = self.datasets.get(file_path)
+        if dataset is not None:
+            return {key: dataset[key] for key in keys if key in dataset}
+        return None
