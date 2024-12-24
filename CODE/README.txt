@@ -15,13 +15,14 @@ DAT36
 │   ├── /classes                # Directory for functional object classes
 │   │   ├── __init__.py
 │   │   ├── data_manager.py      # Class for managing data imports
+│   │   ├── DropArea.py      	# Class for Drag and Drop Import & Data Display
 │   │   ├── other_functional_class.py  # Other functional classes
 │   │   └── ...
 │   │
 │   ├── /gui                    # Directory for graphical object classes
 │   │   ├── __init__.py
 │   │   ├── main_window.py       # Main window class
-│   │   ├── custom_dialog.py     # Custom dialog class
+│   │   ├── ImportTab.py     	# Import Tab
 │   │   └── ...
 │   │
 │   ├── /utils                  # Utility functions/classes
