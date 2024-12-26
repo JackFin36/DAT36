@@ -1,14 +1,14 @@
 import os
 import sys
 from PyQt6 import QtWidgets, uic
-sys.path.append(r'CODE\src\classes')
+sys.path.append(r"C:\Users\duong\Desktop\DATool\DAT36-main\CODE\src\classes")
 from DropArea import DropArea
 from DataManager import DataManager
 
 class ImportTab(QtWidgets.QWidget):
     def __init__(self, MainWindow, data_manager: DataManager):
         super().__init__()
-        uic.loadUi(r'CODE/ui/ImportTab.ui', self)  # Lade die UI-Datei
+        uic.loadUi(r'C:\Users\duong\Desktop\DATool\DAT36-main\CODE\ui\ImportTab.ui', self)  # Lade die UI-Datei
 
         self.DM = data_manager
         self.MW = MainWindow
@@ -34,6 +34,11 @@ class ImportTab(QtWidgets.QWidget):
         # Logic still missing as Plot Tab in development
         self.MW.mainTabWidget.setCurrentIndex(2)
 
+        #Integriere FileSelection um auf Daten zuzugreifen aus verschiedenen Tabs
+        X = self.DM.get_data(self.DM.selected_file, 'Alter')
+        Y = self.DM.get_data(self.DM.selected_file, 'Einkommen')
+        self.MW.visualize_tab.scattery(X,Y)
+
     def file_selected(self, index):
         self.DM.selected_file = self.fileSelector.itemText(index)
         itemList = self.DM.get_headers(self.DM.selected_file)
@@ -50,7 +55,7 @@ class ImportTab(QtWidgets.QWidget):
             self.DM.process_file(file_path)
             filename = os.path.basename(file_path)
             self.fileSelector.addItems(self.DM.list_datasets())
-            self.display_data_in_tabs(self.DM.get_data(file_path), self.DM.get_headers(file_path), filename)
+            self.display_data_in_tabs(self.DM.get_allData(file_path), self.DM.get_headers(file_path), filename)
 
     def display_data_in_tabs(self, data, headers, filename):
         tab = QtWidgets.QWidget()

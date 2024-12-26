@@ -1,6 +1,7 @@
 import sys
 from PyQt6 import QtWidgets, uic, QtCore
-from gui.MainWindow import MainWindow
+sys.path.append(r"C:\Users\duong\Desktop\DATool\DAT36-main\CODE\src\gui")
+from MainWindow import MainWindow
       
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
