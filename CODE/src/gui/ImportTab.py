@@ -28,18 +28,24 @@ class ImportTab(QtWidgets.QWidget):
         self.import_button.clicked.connect(self.selectButtonImport)
         self.fileSelector.currentIndexChanged.connect(self.file_selected)
         self.PlotButton.clicked.connect(self.plot)
+        self.xlistWidget.itemSelectionChanged.connect(self.xSelection)
+        self.ylistWidget.itemSelectionChanged.connect(self.ySelection)
 
+    def xSelection(self):
+        self.DM.selected_x = self.xlistWidget.selectedItems()
+        
+    def ySelection(self):
+        self.DM.selected_y = self.ylistWidget.selectedItems()
 
     def plot(self):
         # Logic still missing as Plot Tab in development
         self.MW.mainTabWidget.setCurrentIndex(2)
 
-        #Integriere FileSelection um auf Daten zuzugreifen aus verschiedenen Tabs
-        X = self.DM.get_data(self.DM.selected_file, 'Alter')
-        Y = self.DM.get_data(self.DM.selected_file, 'Einkommen')
-        self.MW.visualize_tab.scattery(X,Y)
-
     def file_selected(self, index):
+        # Clear the QListWidget items
+        self.xlistWidget.clear()
+        self.ylistWidget.clear()
+        # Fill in the options from the selected file
         self.DM.selected_file = self.fileSelector.itemText(index)
         itemList = self.DM.get_headers(self.DM.selected_file)
         self.xlistWidget.addItems(itemList)
@@ -54,6 +60,7 @@ class ImportTab(QtWidgets.QWidget):
         if file_path:
             self.DM.process_file(file_path)
             filename = os.path.basename(file_path)
+            self.fileSelector.clear()
             self.fileSelector.addItems(self.DM.list_datasets())
             self.display_data_in_tabs(self.DM.get_allData(file_path), self.DM.get_headers(file_path), filename)
 

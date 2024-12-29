@@ -8,6 +8,8 @@ class DataManager():
         self.datasets = {}  # Dictionary to store datasets with filenames as keys
         self.headers = {}   # Dictionary to store headers of the datasets with filenames as keys
         self.selected_file = None # Placeholder for later file selection
+        self.selected_x = None
+        self.selected_y = None
 
     def import_csv(self, file_path):
         """Import a CSV file and convert it to a NumPy array, also extracting headers."""
